@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 
 
-dbName = "recipes"
+dbName = "fridge"
 client = MongoClient(f"mongodb://localhost/{dbName}")
-db = client.get_database()
+db = client.get_database("fridge")
