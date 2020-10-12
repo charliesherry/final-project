@@ -10,38 +10,28 @@ def welcome():
 
 @app.route('/search/<ingredient>')
 def recipesbyingred(ingredient):
-    collection = db.recipes 
-    projection = {"title":1,"prep_methods":1}
-    #recipes=db.recipes.find({"ingredients":{"$regex":f"{ingredient}"}})
+    recipes = []
+    projection = {"title":1,"prep_methods":1,"ingredients":1,"skill_level":1,"serving":1}
     for x in db.recipes.find({"ingredients":{"$regex":f"{ingredient}"}},projection):
-        title = x.get("title")
-        prep = x.get("prep_methods")
-        ingred = x.get("ingredients")
-
-        result = {
-            "title" : title,
-            "preparation" : prep,
-            "ingredients":ingred
-        }
+        recipes.append(x.get("title"))
+        recipes.append(x.get("serving"))
+        recipes.append(x.get("skill_level"))
+        recipes.append(x.get("prep_methods"))
+        recipes.append(x.get("ingredients"))
+        
     try:
-        return dumps(result)
+        return jsonify(recipes)
     except: raise ValueError("Ingredient not found in db, check your spelling or try another one")
 
 @app.route('/search/level/<difficulty>')
 def recipesbydif(difficulty):
-    collection = db.recipes 
-    projection = {"title":1,"prep_methods":1}
-    #recipes=db.recipes.find({"ingredients":{"$regex":f"{ingredient}"}})
+    dif = ["Easy","A challenge", "More effort"]
+    recipes1 = []
+    projection = {"title":1,"prep_methods":1,"ingredients":1}
     for x in db.recipes.find({"skill_level":f" {difficulty} "},projection):
-        title = x.get("title")
-        prep = x.get("prep_methods")
-        ingred = x.get("ingredients")
-
-        result = {
-            "title" : title,
-            "preparation" : prep,
-            "ingredients":ingred
-        }
-    try:
-        return jsonify(result)
-    except: raise ValueError("Difficulty not found in db. Available difficulties: Easy, More effort, A challenge")
+        recipes1.append(x.get("title"))
+        recipes1.append(x.get("prep_methods"))
+        recipes1.append(x.get("ingredients"))
+    if difficulty not in dif:
+        raise ValueError("Difficulty not found in db. Available difficulties: Easy, More effort, A challenge")
+    else: return jsonify(recipes1)
