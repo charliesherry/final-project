@@ -1,0 +1,75 @@
+<html>
+
+<head>
+    <title>Simple caprese salad</title>
+</head>
+
+<body>
+    <header>
+        <section>
+            <h2>{{variable[0]}}</h2>
+        </section>
+        <section>
+            <img src="{{variable[1]}}" alt="W3Schools.com" width="104" height="142">
+        </section>
+    </header>
+    <article>
+        <section id="ingredients">
+            <h3>Ingredients</h3>
+            <p>{{variable[2]}}</p>
+            <ul>
+                <li>{{variable[3]}}</li>
+                <li>{{variable[3][0:15]}}</li>
+                <li></a></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </section>
+        <section>
+            <h3>Preparation</h3>
+            <ul>
+                <li>{{variable[4][2:]}}</li>
+            </ul>
+        </section>
+    </article>
+    <footer>
+        <section>
+            <h3>Leave a review!</h3>
+            <form>
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" />
+                </div>
+                <div>
+                    <label for="review">Review:</label>
+                    <textarea id="review" cols="60" rows="5"></textarea>
+                </div>
+            </form>
+        </section>
+        <section>
+            <h3>Reviews</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Review</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>techie4good@adventure-works.com</td>
+                        <td>Loved it!!</td>
+                    </tr>
+                    <tr>
+                        <td>geektrainer@adventure-works.com</td>
+                        <td>Used extra cheese. Came out great!</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </footer>
+</body>
+
+</html>
