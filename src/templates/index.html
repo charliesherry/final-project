@@ -1,65 +1,41 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>My Fridge API!</title>
-    <link rel="stylesheet" href="style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> 
-    <link href="style.css" rel="stylesheet">
-  </head>
-  <BODY>
-    <div class="container">
-        <table  style="background-color:red;"> <tr><td>
-        </td> 
-        <td width="600px"> 
-        <h1><font color="black">What is in your fridge?</font></h1>
-    </td> 
-    </tr> <table>
-    </div>
-
-    <table cellpadding="10">
-        <TR>
-            <td colspan="3"><H3>Obtain a list of recipes depending on your ingredients, time or chef preference!</H3></td>
-        </TR>
-
-        <TR>
-         <TD width="300px">
-
-        </td>
-
-        <td width="500px"> 
-            <label>Welcome! <span id="Welcome"></span></label>
-             <p style="text-align:center">
-                <img src="https://hosting.photobucket.com/images/i/charlie_sket/fridge1.jpg?width=450&height=278&fit=bounds&crop=fill" alt="whats in your fridge" id="img_quality" style='padding:1px; border:1px solid #021a40; width: 100%; height: 100%'>
-             </p>
-        </td>
-
-         <td width="600px"> 
-          
-          </div>
-            <form action="/recipes/">
-            Ingredient:<br><input type="text" name=a>
-            <br>
-            <input type="submit" value="Submit">
-            </form>
-          </div>
-    
-          </div>
-          <label for="cars">Choose a difficulty:</label>
-          <select id="cars" name="cars">
-            <option value="Easy">Easy</option>
-            <option value="More effort">Medium</option>
-            <option value="A challenge">Hard</option>
-          </select>
-          </div>
-          </td>
-        </tr>
-        </table>
-        </p>
-        <button type = "submit" onclick="recipes()">Click me</button>
+<!DOCTYPE html>
+<html lang=“en”>
+<center>
+<head>
+    <meta charset=“UTF-8">
+    <meta name=“viewport” content=“width=device-width, initial-scale=1.0">
+    <title>What's in your Fridge!</title>
+</head>
+<body style="background-color:rgb(37, 122, 192);">
+<h1 style="font-family:Palatino">Welcome to What's in your fride!</h1>
+  <img src="http://sponsored.bostonglobe.com/wp-content/uploads/2018/06/LMXS27626S-Interior-Shelving-Styled.jpg" alt="whats in your fridge" id="img_quality" style='padding:1px; border:1px solid #021a40; width: 40%; height: 40%'>
+</center>
+<left>
+  <h2> Search by ingredients (3 max):</h2>
+  <p>Introduce them separated by commas</p>
+  <form action="/search" method= "POST">
+    <label for="ingredient1"></label><br>
+    <input type="text" id="fname" name = "a"><br>
+    <input type="submit" value="Search">
+  </form>
+  <h2> Search by difficulty:</h2>
+  <form action="search/level" method="post">
+    <select name="difficulty" id="difficulty">
+        <option value="Easy">Easy</option>
+        <option value="An effort">Medium</option>
+        <option value="A challenge">Hard</option>
         
-</BODY>
+    </select> 
+    <input type="submit" name="submit" value="Search">
+</form>
+</left>
+</body>
+
 </html>
+
+
+
+
 
 
 

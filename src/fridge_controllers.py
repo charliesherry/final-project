@@ -9,11 +9,6 @@ from funciones import decode
 def hello():
     return render_template('index.html')
 
-
-
-#@app.route('/')
-#def welcome():
-#    return {"message":'Welcome to the Fridge API!'}
 @app.route('/recipes/<ingredient>')
 def recipes(ingredient):
     recipes = []
@@ -29,24 +24,6 @@ def recipes(ingredient):
     b = f"{ingredient}"
 
     return render_template("allrecipes.html",variable=[a,b])
-
-@app.route('/prueba/<ingredient>')
-def recipesbyingred2(ingredient):
-    recipes = []
-    
-    projection = {"title":1,"prep_methods":1,"ingredients":1,"skill_level":1,"serving":1,"chef_name":1,"_id":0,"new_images":1}
-    try:
-        hola = list(db.recipes.find({"ingredients":{"$regex":f"{ingredient}"}},projection))
-        for diccionario in hola:
-            for key,valor in diccionario.items():
-                diccionario[f"{key}"] = decode(diccionario.get(f"{key}"))
-            recipes.append(diccionario)
-        a = recipes[0].get("title")
-        b = recipes[0].get("new_images")
-        c = recipes[0].get("serving")
-        d = recipes[0].get("ingredients")
-        return render_template("recipes.html",variable = [a,b,c,d])
-    except: raise ValueError("Ingredient not found in db, check your spelling or try another one")
 
 @app.route('/prueba2/<recipe>')
 def recipesbyingred3(recipe):
@@ -64,57 +41,76 @@ def recipesbyingred3(recipe):
         c = recipes[0].get("serving")
         d = recipes[0].get("ingredients")
         e = recipes[0].get("prep_methods")
-        return render_template("recipes.html",variable = [a,b,c,d,e])
+        f = recipes[0].get("chef_name")
+        return render_template("recipes.html",variable = [a,b,c,d,e,f])
     except: raise ValueError("Ingredient not found in db, check your spelling or try another one")
 
-
-@app.route('/search/<ingredient>')
-def recipesbyingred(ingredient):
-    recipes = []
-    projection = {"title":1,"prep_methods":1,"ingredients":1,"skill_level":1,"serving":1,"chef_name":1}
-    try:
-        for x in db.recipes.find({"ingredients":{"$regex":f"{ingredient}"}},projection):
-            recipes.extend([x.get("title"),x.get("serving"),x.get("chef_name"),x.get("skill_level"),
-            x.get("prep_methods"),x.get("ingredients")])
-        
-        return jsonify(recipes)
-    except: raise ValueError("Ingredient not found in db, check your spelling or try another one")
-
-@app.route('/search/level/<difficulty>')
-def recipesbydif(difficulty):
+@app.route('/search/level' , methods = ["POST"])
+def recipesbydif():
     dif = ["Easy","A challenge", "More effort"]
     recipes1 = []
-    projection = {"title":1,"prep_methods":1,"ingredients":1}
-    for x in db.recipes.find({"skill_level":f" {difficulty} "},projection):
-        recipes1.append(x.get("title"))
-        recipes1.append(x.get("prep_methods"))
-        recipes1.append(x.get("ingredients"))
+    names = []
+    difficulty = request.form.get("difficulty")
+    projection = {"title":1}
+    hola = list(db.recipes.find({"skill_level":f" {difficulty} "},projection))
+    for diccionario in hola:
+            for key,valor in diccionario.items():
+                diccionario[f"{key}"] = decode(diccionario.get(f"{key}"))
+            recipes1.append(diccionario)
+            names.append(valor)
+    a = names
+    b = f"{difficulty}"
     if difficulty not in dif:
         raise ValueError("Difficulty not found in db. Available difficulties: Easy, More effort, A challenge")
-    else: return jsonify(recipes1)
+    else: return render_template("allrecipes.html",variable=[a,b])
 
-@app.route('/search/<ingredient1>,<ingredient2>,<ingredient3>')
-def recipesbyingreds(ingredient1,ingredient2=None,ingredient3=None):
+@app.route('/search', methods = ["POST"])
+def recipesbyingreds():
+    ingredients = request.form.get("a")
+    ingredients = ingredients.split(",")
     recipes = []
-    projection = {"title":1,"prep_methods":1,"ingredients":1,"skill_level":1,"serving":1,"chef_name":1,"_id":0}
-    if ingredient3 == None:
+    names = []
+    projection = {"title":1,"_id":0}
+    if len(ingredients) == 2:
+        ingredient1 = ingredients[0]
+        ingredient2 = ingredients[1]
         try:
             hola = list(db.recipes.find({ "$and": [ {"ingredients":{"$regex":f"{ingredient1}"}},{"ingredients":{"$regex":f"{ingredient2}"}}]},projection))
             for diccionario in hola:
                 for key,valor in diccionario.items():
                     diccionario[f"{key}"] = decode(diccionario.get(f"{key}"))
                 recipes.append(diccionario)
-    
-            return jsonify(recipes)
+                names.append(valor)
+            a = names
+            b = f"{ingredient1},{ingredient2}"
+            return render_template("allrecipes.html",variable=[a,b])
         except: raise ValueError("Ingredient not found in db, check your spelling or try another one")
-    elif ingredient3 != None:
+    elif len(ingredients) == 3:
+        ingredient1 = ingredients[0]
+        ingredient2 = ingredients[1]
+        ingredient3 = ingredients[2]
         try:
             hola = list(db.recipes.find({ "$and": [ {"ingredients":{"$regex":f"{ingredient1}"}},{"ingredients":{"$regex":f"{ingredient2}"}},{"ingredients":{"$regex":f"{ingredient3}"}}]},projection))
             for diccionario in hola:
                 for key,valor in diccionario.items():
                     diccionario[f"{key}"] = decode(diccionario.get(f"{key}"))
                 recipes.append(diccionario)
-    
-            return jsonify(recipes)
+                names.append(valor)
+            a = names
+            b = f"{ingredient1},{ingredient2},{ingredient3}"
+
+            return render_template("allrecipes.html",variable=[a,b])
         except: raise ValueError("Ingredient not found in db, check your spelling or try another one")
-        
+    elif len(ingredients) == 1:
+        ingredient1 = ingredients[0]
+        try:
+            hola = db.recipes.find({"ingredients":{"$regex":f"{ingredient1}"}},projection)
+            for diccionario in hola:
+                for key,valor in diccionario.items():
+                    diccionario[f"{key}"] = decode(diccionario.get(f"{key}"))
+                recipes.append(diccionario)
+                names.append(valor)
+            a = names
+            b = f"{ingredient1}"
+            return render_template("allrecipes.html",variable=[a,b])
+        except: raise ValueError("Ingredient not found in db, check your spelling or try another one")
